@@ -6,11 +6,6 @@
 <script>
   export default {
     name: 'Notes',
-    data() {
-      return {
-        
-      };
-    }
   };
 </script>
 

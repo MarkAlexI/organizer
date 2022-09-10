@@ -5,11 +5,6 @@
 <script>
   export default {
     name: 'MyHeader',
-    data() {
-      return {
-        
-      };
-    }
   };
 </script>
 
@@ -17,5 +12,6 @@
   h1 {
     font-size: 28px;
     color: rebeccapurple;
+    margin-bottom: 30px;
   }
 </style>

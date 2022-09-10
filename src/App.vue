@@ -13,9 +13,6 @@ import Notes from "./components/Notes.vue";
 
 export default {
   name: 'App',
-  data() {
-    return {};
-  },
   components: {
     MyHeader,
     Calendar,
@@ -25,6 +22,18 @@ export default {
 </script>
 
 <style>
+  * {
+    margin: 0;  padding: 0;
+  }
+
+  body {
+    height: 100vh;
+    background: #ddd;
+    display: flex;
+    justify-content: center;
+    font-family: "Arial", sans-serif;
+    user-select: none;
+  }
   .container {
     margin: 10px 20px;
   }
