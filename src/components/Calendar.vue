@@ -25,6 +25,12 @@
         <div class="days"></div>
       </div>
     </div>
+    
+    <div class="goto-buttons">
+      <button type="button" class="btn prev-year">Prev Year</button>
+      <button type="button" class="btn today">Today</button>
+      <button type="button" class="btn next-year">Next Year</button>
+    </div>
   </div>
 </template>
 
