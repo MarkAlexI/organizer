@@ -35,32 +35,33 @@
 </template>
 
 <script>
-  import { ref, onMounted } from "vue";
+  import { ref, watch, onMounted } from "vue";
   export default {
     props: {
       
     },
     name: "Calendar",
     setup(props, context) {
-      const today = new Date().setHours(0, 0, 0, 0);
+      const date = ref(new Date());
+      const today = ref(new Date().setHours(0, 0, 0, 0));
       const currentMonth = ref("January 2022");
       
-      const takeCurrentMonth = (date = new Date()) => {
-        if (typeof date !== 'object') date = new Date(date);
-        return currentMonth.value = date.toLocaleDateString("en-US", { month: 'long', year: 'numeric' })
+      const takeCurrentMonth = () => {
+        return currentMonth.value = date.value.toLocaleDateString("en-US", { month: 'long', year: 'numeric' })
       };
       
       const prevNextMonth = (route) => {
-        const date = new Date(currentMonth.value);
-        const newDate = date.setMonth(date.getMonth() + route);
-        currentMonth.value = takeCurrentMonth(newDate);
-      };
+        date.value = new Date(date.value.setMonth(date.value.getMonth() + route));
       
+        takeCurrentMonth();
+      };
+
       onMounted(() => {
         takeCurrentMonth();
       });
     
       return {
+        date,
         today,
         currentMonth,
         takeCurrentMonth,
