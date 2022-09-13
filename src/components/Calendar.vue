@@ -16,14 +16,18 @@
     </div>
     <div class="calendar">
       <div class="weekdays">
-        <div class="days">{{ today }}</div>
-        <div class="days"></div>
-        <div class="days"></div>
-        <div class="days"></div>
-        <div class="days"></div>
-        <div class="days"></div>
-        <div class="days"></div>
+        <div class="days">Mo</div>
+        <div class="days">Tu</div>
+        <div class="days">We</div>
+        <div class="days">Th</div>
+        <div class="days">Fr</div>
+        <div class="days">Sa</div>
+        <div class="days">Su</div>
       </div>
+    </div>
+    
+    <div v-html="calendarDays" class="calendar-days">
+      
     </div>
     
     <div class="goto-buttons">
@@ -45,6 +49,7 @@
       const date = ref(new Date());
       const today = ref(new Date().setHours(0, 0, 0, 0));
       const currentMonth = ref("January 2022");
+      const calendarDays = ref("<div>qwerty</div>");
       
       const takeCurrentMonth = () => {
         return currentMonth.value = date.value.toLocaleDateString("en-US", { month: 'long', year: 'numeric' })
@@ -52,20 +57,21 @@
       
       const prevNextMonth = (route) => {
         date.value = new Date(date.value.setMonth(date.value.getMonth() + route));
-      
-        takeCurrentMonth();
       };
-
+      
       onMounted(() => {
         takeCurrentMonth();
       });
+    
+      watch(date, takeCurrentMonth);
     
       return {
         date,
         today,
         currentMonth,
+        calendarDays,
         takeCurrentMonth,
-        prevNextMonth,
+        prevNextMonth
       };
     },
   };
@@ -76,12 +82,29 @@
     font-size: 24px;
     color: mediumpurple;
   }
+  .schedule {
+    width: 300px;
+    height: fit-content;
+    background: -webkit-linear-gradient(to right, greenyellow, yellowgreen);
+    background: linear-gradient(to right, greenyellow, yellowgreen);
+    border-radius: 10px;
+    box-shadow: 0px 0px 8px #000;
+  }
   .calendar-bar {
     display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    padding-bottom: 15px;
+    border-bottom: 19px;
   }
-  .current-month {
-    padding: 0 3px;
+  .calendar-bar > .current-month {
     font-size: 20px;
+    font-weight: bold;
+    color: #ddd;
+    background:#000;
+    padding: 3px;
+    border-radius: 6px;
   }
   btn {
     font-size: 20px;
