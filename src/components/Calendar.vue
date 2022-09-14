@@ -33,7 +33,7 @@
     <div class="goto-buttons">
       <button type="button" class="btn prev-year">Prev Year</button>
       <button type="button" class="btn today">Today</button>
-      <button type="button" class="btn next-year">Next Year</button>
+      <button type="button" class="btn next-year" v-on:click="setCalendar">Next Year</button>
     </div>
   </div>
 </template>
@@ -59,6 +59,21 @@
         date.value = new Date(date.value.setMonth(date.value.getMonth() + route));
       };
       
+      const setCalendar = () => {
+        const prevLastDay = new Date(date.value.getFullYear(), date.value.getMonth(), 0).getDate();
+        const totalMonthDay = new Date(date.value.getFullYear(), date.value.getMonth() + 1, 0).getDate();
+        const firstWeekDay = new Date(date.value.getFullYear(), date.value.getMonth(), 1).getDay();
+        const totalDays = 7 * 6;
+        calendarDays.value = '';
+        
+        for (let i = 0; i < totalDays; i++) {
+          let day = i - firstWeekDay;
+          if (i <= firstWeekDay) {
+            calendarDays.value += `<div class="prev-day">${prevLastDay - i}</div>`;
+          }
+        }
+      };
+      
       onMounted(() => {
         takeCurrentMonth();
       });
@@ -71,7 +86,8 @@
         currentMonth,
         calendarDays,
         takeCurrentMonth,
-        prevNextMonth
+        prevNextMonth,
+        setCalendar
       };
     },
   };

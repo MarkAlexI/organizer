@@ -7,9 +7,9 @@
 </template>
 
 <script>
-import MyHeader from "./components/MyHeader.vue";
-import Calendar from "./components/Calendar.vue";
-import Notes from "./components/Notes.vue";
+import MyHeader from "@/MyHeader";
+import Calendar from "@/Calendar";
+import Notes from "@/Notes";
 
 export default {
   name: 'App',
