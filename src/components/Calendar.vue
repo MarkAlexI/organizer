@@ -49,7 +49,7 @@
       const date = ref(new Date());
       const today = ref(new Date().setHours(0, 0, 0, 0));
       const currentMonth = ref("January 2022");
-      const calendarDays = ref("<div>qwerty</div>");
+      const calendarDays = ref("");
       
       const takeCurrentMonth = () => {
         return currentMonth.value = date.value.toLocaleDateString("en-US", { month: 'long', year: 'numeric' })
@@ -69,13 +69,21 @@
         for (let i = 0; i < totalDays; i++) {
           let day = i - firstWeekDay;
           if (i <= firstWeekDay) {
-            calendarDays.value += `<div class="prev-day">${prevLastDay - i}</div>`;
+            calendarDays.value = `<div class="prev-day">${prevLastDay - i}</div>` + calendarDays.value;
+          } else if (i <= firstWeekDay + totalMonthDay) {
+            date.value.setDate(day);
+            date.value.setHours(0, 0, 0, 0);
+            let dayClass = date.value.valueOf() === today.value.valueOf() ? 'current-day' : 'month-day';
+            calendarDays.value += `<div class='${dayClass}'>${day}</div>`;
+          } else {
+            calendarDays.value += `<div class='prev-day'>${day - totalMonthDay}</div>`;
           }
         }
       };
       
       onMounted(() => {
         takeCurrentMonth();
+        setCalendar();
       });
     
       watch(date, takeCurrentMonth);
@@ -99,10 +107,10 @@
     color: mediumpurple;
   }
   .schedule {
-    width: 300px;
+    width: 290px;
     height: fit-content;
-    background: -webkit-linear-gradient(to right, greenyellow, yellowgreen);
-    background: linear-gradient(to right, greenyellow, yellowgreen);
+    background: -webkit-linear-gradient(to bottom right, greenyellow, yellowgreen);
+    background: linear-gradient(to bottom right, greenyellow, yellowgreen);
     border-radius: 10px;
     box-shadow: 0px 0px 8px #000;
   }
@@ -118,9 +126,39 @@
     font-size: 20px;
     font-weight: bold;
     color: #ddd;
-    background:#000;
+    background: darkblue;
     padding: 3px;
     border-radius: 6px;
+  }
+  .weekdays, .calendar-days {
+    display: flex;
+    flex-wrap: wrap;
+    padding-inline: 15px;
+  }
+  .days {
+    color: #fff;
+    font-weight: 700;
+  }
+  .days, [class$="-day"] {
+    width: 36px;
+    height: 36px;
+    color: #000;
+    text-align: center;
+    line-height: 36px;
+    font-weight: 500;
+    font-size: 1rem;
+  }
+  .current-day {
+    background-color: darkblue;
+    color: #fff;
+    border-radius: 50%;
+    font-weight: 700;
+    transition: 0.5s;
+    cursor: pointer;
+  }
+  .prev-day {
+    color: #a5a5a5;
+    user-select: none;
   }
   btn {
     font-size: 20px;
