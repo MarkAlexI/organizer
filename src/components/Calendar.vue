@@ -31,9 +31,21 @@
     </div>
     
     <div class="goto-buttons">
-      <button type="button" class="btn prev-year">Prev Year</button>
-      <button type="button" class="btn today">Today</button>
-      <button type="button" class="btn next-year" v-on:click="setCalendar">Next Year</button>
+      <button type="button"
+              class="btn prev-year"
+              @click="prevNextYear(-1)"
+             >Prev Year
+      </button>
+      <button type="button"
+              class="btn today"
+              @click="prevNextYear(0)"
+             >Today
+      </button>
+      <button type="button"
+              class="btn next-year"
+              v-on:click="prevNextYear(1)"
+             >Next Year
+      </button>
     </div>
   </div>
 </template>
@@ -59,12 +71,23 @@
         date.value = new Date(date.value.setMonth(date.value.getMonth() + route));
       };
       
+      const prevNextYear = (route) => {
+        if (route === 0) {
+          date.value = new Date(today.value);
+        } else {
+          date.value = new Date(date.value.getFullYear() + route, 0, 1);
+        }
+      };
+      
       const setCalendar = () => {
         const prevLastDay = new Date(date.value.getFullYear(), date.value.getMonth(), 0).getDate();
         const totalMonthDay = new Date(date.value.getFullYear(), date.value.getMonth() + 1, 0).getDate();
         const firstWeekDay = new Date(date.value.getFullYear(), date.value.getMonth(), 1).getDay();
         const totalDays = 7 * 6;
         calendarDays.value = '';
+        
+        today.value = new Date().setHours(0, 0, 0, 0);
+        takeCurrentMonth();
         
         for (let i = 0; i < totalDays; i++) {
           let day = i - firstWeekDay;
@@ -82,11 +105,10 @@
       };
       
       onMounted(() => {
-        takeCurrentMonth();
         setCalendar();
       });
     
-      watch(date, takeCurrentMonth);
+      watch(date, setCalendar);
     
       return {
         date,
@@ -95,6 +117,7 @@
         calendarDays,
         takeCurrentMonth,
         prevNextMonth,
+        prevNextYear,
         setCalendar
       };
     },
