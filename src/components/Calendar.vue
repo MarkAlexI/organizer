@@ -82,24 +82,27 @@
       const setCalendar = () => {
         const prevLastDay = new Date(date.value.getFullYear(), date.value.getMonth(), 0).getDate();
         const totalMonthDay = new Date(date.value.getFullYear(), date.value.getMonth() + 1, 0).getDate();
-        const firstWeekDay = new Date(date.value.getFullYear(), date.value.getMonth(), 1).getDay();
+        let firstWeekDay = new Date(date.value.getFullYear(), date.value.getMonth(), 1).getDay();
+        if (firstWeekDay < 2) firstWeekDay += 7;
         const totalDays = 7 * 6;
         calendarDays.value = '';
-        
+
         today.value = new Date().setHours(0, 0, 0, 0);
         takeCurrentMonth();
         
         for (let i = 0; i < totalDays; i++) {
           let day = i - firstWeekDay;
-          if (i <= firstWeekDay) {
+          if (i <= firstWeekDay - 2) {
             calendarDays.value = `<div class="prev-day">${prevLastDay - i}</div>` + calendarDays.value;
-          } else if (i <= firstWeekDay + totalMonthDay) {
-            date.value.setDate(day);
-            date.value.setHours(0, 0, 0, 0);
-            let dayClass = date.value.valueOf() === today.value.valueOf() ? 'current-day' : 'month-day';
-            calendarDays.value += `<div class='${dayClass}'>${day}</div>`;
+          } else if (i <= firstWeekDay + totalMonthDay - 2) {
+            const newDate = new Date(date.value.valueOf());
+            newDate.setDate(day + 2);
+            newDate.setHours(0, 0, 0, 0);
+            
+            const dayClass = newDate.valueOf() == today.value ? 'current-day' : 'month-day';
+            calendarDays.value += `<div class='${dayClass}'>${day + 2}</div>`;
           } else {
-            calendarDays.value += `<div class='prev-day'>${day - totalMonthDay}</div>`;
+            calendarDays.value += `<div class='prev-day'>${day - totalMonthDay + 2}</div>`;
           }
         }
       };
