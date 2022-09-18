@@ -3,9 +3,13 @@
   <textarea name="" id="currentNote" cols="30" rows="10"></textarea>
   <button class="btn" v-on:click="saveNote()">Save.</button>
   <ul class="" v-for="note in notes">
-    <li class="">{{ note }}</li>
+    <li class="">
+      <a href="#" v-on:click="info">
+        {{ note[0] }}
+      </a>
+      </li>
   </ul>
-  <p id="end">Not implemented.</p>
+  <p id="end"></p>
 </template>
 
 <script setup>
@@ -17,8 +21,14 @@
         
     const time = new Date().toTimeString().slice(0, 8);
     notes.set(time, currentNote.value);
-    console.log(Array.from(notes));
   };
+
+  const info = (event) => {
+    event.preventDefault();
+    const readingNote = event.currentTarget.innerText;
+    currentNote.value = notes.get(readingNote);
+  }
+  
 </script>
 
 <style>
