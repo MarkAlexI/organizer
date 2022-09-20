@@ -1,29 +1,27 @@
 <template>
   <div class="container">
     <MyHeader></MyHeader>
-    <Calendar></Calendar>
+    <Calendar @newactivedate="changeDate"></Calendar>
     <Notes></Notes>
   </div>
 </template>
 
-<script>
-import MyHeader from "@/MyHeader";
-import Calendar from "@/Calendar";
-import Notes from "@/Notes";
+<script setup>
+  import { ref, provide } from "vue";
+  import MyHeader from "@/MyHeader";
+  import Calendar from "@/Calendar";
+  import Notes from "@/Notes";
 
-export default {
-  name: 'App',
-  components: {
-    MyHeader,
-    Calendar,
-    Notes
-  },
-};
+  const keyDate = ref("35 Dfg 3214");
+  const changeDate = (event) => keyDate.value = event;
+  
+  provide('keyDate', keyDate);
 </script>
 
 <style>
   * {
-    margin: 0;  padding: 0;
+    margin: 0;
+    padding: 0;
   }
 
   body {
@@ -34,6 +32,7 @@ export default {
     font-family: "Arial", sans-serif;
     user-select: none;
   }
+
   .container {
     margin: 10px 20px;
   }

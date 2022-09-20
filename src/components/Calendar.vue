@@ -39,8 +39,11 @@
 
 <script setup>
   import { ref, watch, onMounted } from "vue";
+  
+  const emit = defineEmits(['newactivedate']);
   const date = ref(new Date());
   const today = ref(new Date().setHours(0, 0, 0, 0));
+  const activeDate = ref("2 Dfg 123");
   const currentMonth = ref("January 2022");
   const calendarDays = ref("");
 
@@ -62,7 +65,8 @@
 
   const getActiveDate = (event) => {
     if (event.target.closest('.month-day') || event.target.closest('.current-day')) {
-      console.log(event.target.innerText + ' ' + currentMonth.value);
+      activeDate.value = event.target.innerText + ' ' + currentMonth.value;
+      emit('newactivedate', activeDate.value);
     }
   };
 
@@ -92,6 +96,9 @@
         calendarDays.value += `<div class='prev-day'>${day - totalMonthDay + 2}</div>`;
       }
     }
+   
+    activeDate.value = (date.value.getMonth() === new Date(today.value).getMonth() ? new Date(today.value).getDate() : '1') + ' ' + currentMonth.value;
+    emit('newactivedate', activeDate.value);
   };
 
   onMounted(() => {

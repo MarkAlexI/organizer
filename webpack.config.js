@@ -53,4 +53,7 @@ module.exports = (env = {}) => ({
       filename: "[name].css"
     })
   ],
+  stats: {
+    errorDetails: true,
+  },
 });

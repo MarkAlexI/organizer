@@ -13,7 +13,13 @@
 </template>
 
 <script setup>
-  import { reactive } from "vue";
+  import { reactive, inject, watchEffect } from "vue";
+  
+  const keyDate = inject('keyDate', '1 April 2134');
+  watchEffect(() => {
+    console.log(keyDate.value);
+  });
+
   
   const notes = reactive(new Map());
   const saveNote = () => {
@@ -28,9 +34,7 @@
     const readingNote = event.currentTarget.innerText;
     currentNote.value = notes.get(readingNote);
   }
-  
 </script>
-
 <style>
 
 </style>
