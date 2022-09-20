@@ -26,7 +26,7 @@
       </div>
     </div>
     
-    <div v-html="calendarDays" class="calendar-days">
+    <div v-html="calendarDays" class="calendar-days" @click="getActiveDate">
       
     </div>
     
@@ -79,6 +79,12 @@
         }
       };
       
+      const getActiveDate = (event) => {
+        if (event.target.closest('.month-day') || event.target.closest('.current-day')) {
+          console.log(event.target.innerText + ' ' + currentMonth.value);
+        }
+      };
+      
       const setCalendar = () => {
         const prevLastDay = new Date(date.value.getFullYear(), date.value.getMonth(), 0).getDate();
         const totalMonthDay = new Date(date.value.getFullYear(), date.value.getMonth() + 1, 0).getDate();
@@ -121,6 +127,7 @@
         takeCurrentMonth,
         prevNextMonth,
         prevNextYear,
+        getActiveDate,
         setCalendar
       };
     },
@@ -173,6 +180,9 @@
     line-height: 36px;
     font-weight: 500;
     font-size: 1rem;
+  }
+  .month-day {
+    cursor: pointer;
   }
   .current-day {
     background-color: darkblue;
