@@ -31,7 +31,7 @@
       </button>
       <button type="button" class="btn today" @click="prevNextYear(0)">Today
       </button>
-      <button type="button" class="btn next-year" v-on:click="prevNextYear(1)">Next Year
+      <button type="button" class="btn next-year" @click="prevNextYear(1)">Next Year
       </button>
     </div>
   </div>
@@ -39,7 +39,7 @@
 
 <script setup>
   import { ref, watch, onMounted } from "vue";
-  
+
   const emit = defineEmits(['newactivedate']);
   const date = ref(new Date());
   const today = ref(new Date().setHours(0, 0, 0, 0));
@@ -96,7 +96,7 @@
         calendarDays.value += `<div class='prev-day'>${day - totalMonthDay + 2}</div>`;
       }
     }
-   
+
     activeDate.value = (date.value.getMonth() === new Date(today.value).getMonth() ? new Date(today.value).getDate() : '1') + ' ' + currentMonth.value;
     emit('newactivedate', activeDate.value);
   };
@@ -112,24 +112,26 @@
   h2 {
     font-size: 24px;
     color: mediumpurple;
+    padding-bottom: 8px;
   }
 
   .schedule {
-    width: 290px;
+    width: 285px;
     height: fit-content;
     background: -webkit-linear-gradient(to bottom right, greenyellow, yellowgreen);
     background: linear-gradient(to bottom right, greenyellow, yellowgreen);
     border-radius: 10px;
     box-shadow: 0px 0px 8px #000;
+    margin-bottom: 8px;
   }
 
   .calendar-bar {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 20px;
-    padding-bottom: 15px;
-    border-bottom: 19px;
+    padding: 18px;
+    padding-bottom: 10px;
+    border-bottom: 15px;
   }
 
   .calendar-bar>.current-month {
@@ -137,7 +139,7 @@
     font-weight: bold;
     color: #ddd;
     background: darkblue;
-    padding: 3px;
+    padding: 7px;
     border-radius: 6px;
   }
 
@@ -182,8 +184,33 @@
     user-select: none;
   }
 
-  btn {
-    font-size: 20px;
+  .btn {
     color: darkred;
+    background: #eee;
+    border: 1px solid yellow;
+    border-radius: 10px;
+    padding: 9px 11px;
+    font-family: "Quicksand", sans-serif;
+    font-weight: 700;
+    font-size: 0.9rem;
+    margin-right: 1px;
+    box-shadow: 0px 0px 0px #000;
+  }
+
+  .btn:hover {
+    background-color: #f8f7fa;
+    color: #000;
+    font-weight: 900;
+    border: 1px solid orange;
+    border-radius: 15px;
+    transition: 0.2s;
+    cursor: pointer;
+  }
+
+  .goto-buttons {
+    border-top: solid 2px yellow;
+    padding-block: 12px;
+    display: flex;
+    justify-content: space-evenly;
   }
 </style>
