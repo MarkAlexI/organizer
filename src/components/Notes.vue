@@ -1,11 +1,11 @@
 <template>
-  <h2>Notes</h2>
+  <h2>Notes. Date: {{ keyDate }}.</h2>
   <textarea name="" id="currentNote" cols="30" rows="10"></textarea>
   <button class="btn" v-on:click="saveNote()">Save.</button>
 
   <transition-group name="list" tag="ul">
-    <li class="list-item" v-for="note in notes" :key="note">
-      <a href="#" v-on:click="info">
+    <li class="list-item" v-for="(note, index) in notes.get(keyDate)" :key="note">
+      <a href="#" @click="info" :data-key="index">
         {{ note[0] }}
       </a>
     </li>
@@ -14,27 +14,36 @@
 </template>
 
 <script setup>
-  import { reactive, inject, watchEffect } from "vue";
+  import { reactive, inject, watch } from "vue";
 
   const keyDate = inject('keyDate', '1 April 2134');
-  watchEffect(() => {
-    console.log(keyDate.value);
+
+  watch(keyDate, () => {
+    currentNote.value = '';
   });
 
-
   const notes = reactive(new Map());
+  
   const saveNote = () => {
     if (!currentNote.value.length) return;
 
     const time = new Date().toTimeString().slice(0, 8);
-    notes.set(time, currentNote.value);
+    let newData = [time, currentNote.value];
+    if (notes.has(keyDate.value)) {
+      let oldData = notes.get(keyDate.value);
+      oldData.push(newData);
+      notes.set(keyDate.value, oldData);
+    } else {
+      notes.set(keyDate.value, [newData]);
+    }
   };
 
-  const info = (event) => {
+  const info = () => {
     event.preventDefault();
-    const readingNote = event.currentTarget.innerText;
-    currentNote.value = notes.get(readingNote);
+    const index = event.currentTarget.dataset.key;
+    currentNote.value = notes.get(keyDate.value)[index][1];
   }
+
 </script>
 
 <style>
