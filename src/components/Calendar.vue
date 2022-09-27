@@ -38,7 +38,13 @@
 </template>
 
 <script setup>
-  import { ref, watch, onMounted } from "vue";
+  import { inject, ref, watch, onMounted } from "vue";
+
+  const daysWithNotes = inject('daysWithNotes', []);
+  watch(daysWithNotes, () => {
+    console.log(daysWithNotes.value);
+  });
+
 
   const emit = defineEmits(['newactivedate']);
   const date = ref(new Date());

@@ -2,7 +2,7 @@
   <div class="container">
     <MyHeader></MyHeader>
     <Calendar @newactivedate="changeDate"></Calendar>
-    <Notes></Notes>
+    <Notes @listofdates="spanNotes"></Notes>
   </div>
 </template>
 
@@ -16,6 +16,11 @@
   const changeDate = (event) => keyDate.value = event;
   
   provide('keyDate', keyDate);
+  
+  const daysWithNotes = ref([]);
+  const spanNotes = (event) => daysWithNotes.value = event;
+  
+  provide('daysWithNotes', daysWithNotes);
 </script>
 
 <style>

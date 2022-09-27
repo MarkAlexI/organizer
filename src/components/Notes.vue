@@ -16,6 +16,7 @@
 <script setup>
   import { reactive, inject, watch } from "vue";
 
+  const emit = defineEmits(['listofdates']);
   const keyDate = inject('keyDate', '1 April 2134');
 
   watch(keyDate, () => {
@@ -36,6 +37,13 @@
     } else {
       notes.set(keyDate.value, [newData]);
     }
+    
+    let notesKeys = [];
+    for (let i of notes) {
+      notesKeys.push(i[0]);
+    }
+
+    emit('listofdates', notesKeys);
   };
 
   const info = () => {
