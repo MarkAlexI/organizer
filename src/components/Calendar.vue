@@ -201,7 +201,7 @@
     height: 36px;
     text-align: center;
     line-height: 36px;
-    font-weight: 900;
+    font-weight: 700;
     font-size: 1rem;
   }
 

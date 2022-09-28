@@ -14,16 +14,73 @@
 </template>
 
 <script setup>
-  import { reactive, inject, watch } from "vue";
+  import { reactive, inject, watch, onUnmounted } from "vue";
 
+  const notes = reactive(new Map());
   const emit = defineEmits(['listofdates']);
+
+  let openRequest = indexedDB.open('store', 1);
+  
+  openRequest.onupgradeneeded = () => {
+    let db = openRequest.result;
+    console.log(db.objectStoreNames, 'up');
+    if (!db.objectStoreNames.contains('notes')) {
+      db.createObjectStore('notes', { keyPath: 'id' });
+    }
+  };
+  
+  openRequest.onerror = () => {
+    console.log('onerror', openRequest.error);
+  };
+  
+  openRequest.onsuccess = () => {
+     let db = openRequest.result;
+     let transaction = db.transaction('notes', 'readonly');
+     let allNotes = transaction.objectStore('notes');
+     let request = allNotes.getAll();
+     
+     transaction.oncomplete = () => {
+       console.table(request.result);
+       if (request.result.length) {
+         let temp = [];
+         for (let note of request.result) {
+           notes.set(note.id, JSON.parse(note.data));
+           temp.push(note.id);
+         }
+         emit('listofdates', temp);
+       }
+     };
+  };
+
+  const addNote = (key, value) => {
+    let db = openRequest.result;
+    let transaction = db.transaction(['notes'], 'readwrite');
+    
+    let allNotes = transaction.objectStore('notes');
+    
+    let note = {
+      id: key,
+      data: value
+    };
+    
+    let request = allNotes.put(note);
+    
+    transaction.oncomplete = () => {
+      console.log('transaction done');
+    };
+    request.onsuccess = () => {
+      console.log('add', request.result);
+    }
+    request.onerror = () => {
+      console.log('no add', request.error);
+    };
+  };
+
   const keyDate = inject('keyDate', '1 April 2134');
 
   watch(keyDate, () => {
     currentNote.value = '';
   });
-
-  const notes = reactive(new Map());
   
   const saveNote = () => {
     if (!currentNote.value.length) return;
@@ -34,8 +91,12 @@
       let oldData = notes.get(keyDate.value);
       oldData.push(newData);
       notes.set(keyDate.value, oldData);
+      
+      addNote(keyDate.value, JSON.stringify(oldData));
     } else {
       notes.set(keyDate.value, [newData]);
+      
+      addNote(keyDate.value, JSON.stringify([newData]));
     }
     
     let notesKeys = [];
@@ -51,7 +112,10 @@
     const index = event.currentTarget.dataset.key;
     currentNote.value = notes.get(keyDate.value)[index][1];
   }
-
+  
+  onUnmounted(() => {
+    openRequest.result.close();
+  });
 </script>
 
 <style scoped>
