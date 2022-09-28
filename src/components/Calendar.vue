@@ -42,7 +42,7 @@
 
   const daysWithNotes = inject('daysWithNotes', []);
   watch(daysWithNotes, () => {
-    console.log(daysWithNotes.value);
+    setCalendar(true);
   });
 
 
@@ -76,7 +76,7 @@
     }
   };
 
-  const setCalendar = () => {
+  const setCalendar = (fromNotes) => {
     const prevLastDay = new Date(date.value.getFullYear(), date.value.getMonth(), 0).getDate();
     const totalMonthDay = new Date(date.value.getFullYear(), date.value.getMonth() + 1, 0).getDate();
     let firstWeekDay = new Date(date.value.getFullYear(), date.value.getMonth(), 1).getDay();
@@ -88,21 +88,27 @@
     takeCurrentMonth();
 
     for (let i = 0; i < totalDays; i++) {
-      let day = i - firstWeekDay;
+      let day = i - firstWeekDay + 2;
       if (i <= firstWeekDay - 2) {
         calendarDays.value = `<div class="prev-day">${prevLastDay - i}</div>` + calendarDays.value;
       } else if (i <= firstWeekDay + totalMonthDay - 2) {
         const newDate = new Date(date.value.valueOf());
-        newDate.setDate(day + 2);
+        newDate.setDate(day);
         newDate.setHours(0, 0, 0, 0);
-
+        
+        const currDay = day + ' ' + currentMonth.value;
+        let noteClass = '';
+        if (daysWithNotes.value.includes(currDay)) noteClass = ' notes';
+        
         const dayClass = newDate.valueOf() == today.value ? 'current-day' : 'month-day';
-        calendarDays.value += `<div class='${dayClass}'>${day + 2}</div>`;
+        calendarDays.value += `<div class='${dayClass + noteClass}'>${day}</div>`;
       } else {
-        calendarDays.value += `<div class='prev-day'>${day - totalMonthDay + 2}</div>`;
+        calendarDays.value += `<div class='prev-day'>${day - totalMonthDay}</div>`;
       }
     }
 
+    if (fromNotes) return;
+    
     activeDate.value = (date.value.getMonth() === new Date(today.value).getMonth() ? new Date(today.value).getDate() : '1') + ' ' + currentMonth.value;
     emit('newactivedate', activeDate.value);
   };
@@ -183,6 +189,20 @@
     font-weight: 700;
     transition: 0.5s;
     cursor: pointer;
+  }
+
+  .month-day:hover {
+    font-weight: 900;
+  }
+
+  .notes {
+    color: orange;
+    width: 36px;
+    height: 36px;
+    text-align: center;
+    line-height: 36px;
+    font-weight: 900;
+    font-size: 1rem;
   }
 
   .prev-day {

@@ -54,7 +54,7 @@
 
 </script>
 
-<style>
+<style scoped>
   a:link {
     color: mediumpurple;
   }
