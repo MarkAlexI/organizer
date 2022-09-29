@@ -8,6 +8,7 @@
       <a href="#" @click="info" :data-key="index">
         {{ note[0] }}
       </a>
+      <p class="btn delete" @click="deleteNote(index)">Delete</p>
     </li>
   </transition-group>
   <p id="end"></p>
@@ -107,6 +108,11 @@
     emit('listofdates', notesKeys);
   };
 
+  const deleteNote = (index) => {
+    notes.get(keyDate.value).splice(index, 1);
+    addNote(keyDate.value, JSON.stringify(notes.get(keyDate.value)));
+  };
+
   const info = () => {
     event.preventDefault();
     const index = event.currentTarget.dataset.key;
@@ -119,6 +125,10 @@
 </script>
 
 <style scoped>
+  a {
+    display: inline-block;
+    margin-bottom: 8px;
+  }
   a:link {
     color: mediumpurple;
   }
@@ -128,6 +138,10 @@
 
   a:active {
     color: mediumorchid;
+  }
+
+  li {
+    margin-bottom: 13px;
   }
 
   .list-item {
