@@ -21,7 +21,7 @@
   const emit = defineEmits(['listofdates']);
 
   let openRequest = indexedDB.open('store', 1);
-  
+
   openRequest.onupgradeneeded = () => {
     let db = openRequest.result;
     console.log(db.objectStoreNames, 'up');
@@ -29,51 +29,51 @@
       db.createObjectStore('notes', { keyPath: 'id' });
     }
   };
-  
+
   openRequest.onerror = () => {
     console.log('onerror', openRequest.error);
   };
-  
+
   openRequest.onsuccess = () => {
-     let db = openRequest.result;
-     let transaction = db.transaction('notes', 'readonly');
-     let allNotes = transaction.objectStore('notes');
-     let request = allNotes.getAll();
-     
-     transaction.oncomplete = () => {
-       console.table(request.result);
-       if (request.result.length) {
-         let temp = [];
-         for (let note of request.result) {
-           notes.set(note.id, JSON.parse(note.data));
-           temp.push(note.id);
-         }
-         emit('listofdates', temp);
-       }
-     };
+    let db = openRequest.result;
+    let transaction = db.transaction('notes', 'readonly');
+    let allNotes = transaction.objectStore('notes');
+    let request = allNotes.getAll();
+
+    transaction.oncomplete = () => {
+      console.table(request.result);
+      if (request.result.length) {
+        let temp = [];
+        for (let note of request.result) {
+          notes.set(note.id, JSON.parse(note.data));
+          temp.push(note.id);
+        }
+        emit('listofdates', temp);
+      }
+    };
   };
 
-  const addNote = (key, value) => {
+  const changeNote = (key, value) => {
     let db = openRequest.result;
     let transaction = db.transaction(['notes'], 'readwrite');
-    
+
     let allNotes = transaction.objectStore('notes');
-    
+
     let note = {
       id: key,
       data: value
     };
-    
-    let request = allNotes.put(note);
-    
+
+    const request = value.length ? allNotes.put(note) : allNotes.delete(key);
+
     transaction.oncomplete = () => {
-      console.log('transaction done');
+      console.log('done');
     };
     request.onsuccess = () => {
-      console.log('add', request.result);
-    }
+      console.log('add/delete', request.result);
+    };
     request.onerror = () => {
-      console.log('no add', request.error);
+      console.log('no add/delete', request.error);
     };
   };
 
@@ -82,7 +82,15 @@
   watch(keyDate, () => {
     currentNote.value = '';
   });
-  
+
+  const notesKeys = () => {
+    let tmp = [];
+    for (let i of notes) {
+      tmp.push(i[0]);
+    }
+    return tmp;
+  };
+
   const saveNote = () => {
     if (!currentNote.value.length) return;
 
@@ -92,25 +100,28 @@
       let oldData = notes.get(keyDate.value);
       oldData.push(newData);
       notes.set(keyDate.value, oldData);
-      
-      addNote(keyDate.value, JSON.stringify(oldData));
+
+      changeNote(keyDate.value, JSON.stringify(oldData));
     } else {
       notes.set(keyDate.value, [newData]);
-      
-      addNote(keyDate.value, JSON.stringify([newData]));
-    }
-    
-    let notesKeys = [];
-    for (let i of notes) {
-      notesKeys.push(i[0]);
+
+      changeNote(keyDate.value, JSON.stringify([newData]));
     }
 
-    emit('listofdates', notesKeys);
+    emit('listofdates', notesKeys());
   };
 
   const deleteNote = (index) => {
-    notes.get(keyDate.value).splice(index, 1);
-    addNote(keyDate.value, JSON.stringify(notes.get(keyDate.value)));
+    const notesCopy = notes.get(keyDate.value).slice();
+    notesCopy.splice(index, 1);
+    if (notesCopy.length > 0) {
+      notes.set(keyDate.value, notesCopy);
+      changeNote(keyDate.value, JSON.stringify(notes.get(keyDate.value)));
+    } else {
+      notes.delete(keyDate.value);
+      changeNote(keyDate.value, '');
+      emit('listofdates', notesKeys());
+    }
   };
 
   const info = () => {
@@ -118,7 +129,7 @@
     const index = event.currentTarget.dataset.key;
     currentNote.value = notes.get(keyDate.value)[index][1];
   }
-  
+
   onUnmounted(() => {
     openRequest.result.close();
   });
@@ -129,9 +140,11 @@
     display: inline-block;
     margin-bottom: 8px;
   }
+
   a:link {
     color: mediumpurple;
   }
+
   a:hover {
     color: hotpink;
   }
