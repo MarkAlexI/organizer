@@ -1,12 +1,13 @@
 {
   "name": "organizer",
   "description": "Daily organizer. Schedule with notes.",
-  "version": "0.5.3",
+  "version": "0.6.3",
   "main": "main.js",
   "scripts": {
     "install-dep": "npm i",
     "build": "webpack",
-    "watch": "webpack --watch"
+    "watch": "webpack --watch",
+    "prod": "webpack --env production"
   },
   "repository": {
     "type": "git",
