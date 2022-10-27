@@ -1,17 +1,24 @@
 <template>
-  <h2>Notes. Date: {{ keyDate }}.</h2>
-  <textarea name="" id="currentNote" cols="30" rows="10"></textarea>
-  <button class="btn" v-on:click="saveNote()">Save.</button>
+  <div style="max-width: 360px;">
+    <h2>Notes. Date: {{ keyDate }}.</h2>
+    <div class="notepad">
+      <textarea name="currentNote" id="currentNote" cols="26" rows="6"></textarea>
+      <div class="controls">
+        <button class="btn control save" v-on:click="saveNote()">Save.</button>
+      </div>
+    </div>
 
-  <transition-group name="list" tag="ul">
-    <li class="list-item" v-for="(note, index) in notes.get(keyDate)" :key="note">
-      <a href="#" @click="info" :data-key="index">
-        {{ note[0] }}
-      </a>
-      <p class="btn delete" @click="deleteNote(index)">Delete</p>
-    </li>
-  </transition-group>
-  <p id="end"></p>
+    <p id="info" v-if="notes.get(keyDate)">Your records:</p>
+
+    <transition-group name="list" tag="ul">
+      <li class="list-item" v-for="(note, index) in notes.get(keyDate)" :key="note">
+        <a href="#" @click="info" :data-key="index">
+          {{ note[0] }}
+        </a>
+        <p class="btn delete" @click="deleteNote(index)">Delete</p>
+      </li>
+    </transition-group>
+  </div>
 </template>
 
 <script setup>
@@ -136,6 +143,37 @@
 </script>
 
 <style scoped>
+  .notepad {
+    display: flex;
+    gap: 10px;
+  }
+
+  #currentNote {
+    max-width: 324px;
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+    padding: 10px;
+    max-width: 100%;
+    line-height: 1.5;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    box-shadow: 1px 1px 1px #999;
+  }
+
+  .control {
+    background-color: slateblue;
+    margin-bottom: 5px;
+  }
+
+  .control:hover {
+    background-color: steelblue;
+  }
+
+  #info {
+    color: darkslateblue;
+    margin-bottom: 2px;
+  }
+
   a {
     display: inline-block;
     margin-bottom: 8px;
@@ -154,7 +192,7 @@
   }
 
   li {
-    margin-bottom: 13px;
+    margin-bottom: 11px;
   }
 
   .list-item {
@@ -175,5 +213,16 @@
 
   .list-item-move {
     transition: transform .8s ease;
+  }
+
+  .save {
+    font-weight: 900;
+    max-height: 50px;
+  }
+
+  @media(min-width: 680px) {
+    .notepad {
+      flex-direction: column;
+    }
   }
 </style>

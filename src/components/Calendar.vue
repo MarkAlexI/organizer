@@ -1,38 +1,40 @@
 <template>
-  <h2>Calendar</h2>
-  <div class="schedule">
-    <div class="calendar-bar">
-      <button class="prev btn" v-on:click="prevNextMonth(-1)">&ltcc;
-      </button>
-      <div class="current-month">
-        {{ currentMonth }}
+  <div>
+    <h2>Calendar</h2>
+    <div class="schedule">
+      <div class="calendar-bar">
+        <button class="prev btn" v-on:click="prevNextMonth(-1)">&ltcc;
+        </button>
+        <div class="current-month">
+          {{ currentMonth }}
+        </div>
+        <button class="next btn" v-on:click="prevNextMonth(1)">&gtcc;
+        </button>
       </div>
-      <button class="next btn" v-on:click="prevNextMonth(1)">&gtcc;
-      </button>
-    </div>
-    <div class="calendar">
-      <div class="weekdays">
-        <div class="days">Mo</div>
-        <div class="days">Tu</div>
-        <div class="days">We</div>
-        <div class="days">Th</div>
-        <div class="days">Fr</div>
-        <div class="days">Sa</div>
-        <div class="days">Su</div>
+      <div class="calendar">
+        <div class="weekdays">
+          <div class="days">Mo</div>
+          <div class="days">Tu</div>
+          <div class="days">We</div>
+          <div class="days">Th</div>
+          <div class="days">Fr</div>
+          <div class="days">Sa</div>
+          <div class="days">Su</div>
+        </div>
       </div>
-    </div>
 
-    <div v-html="calendarDays" class="calendar-days" @click="getActiveDate">
+      <div v-html="calendarDays" class="calendar-days" @click="getActiveDate">
 
-    </div>
+      </div>
 
-    <div class="goto-buttons">
-      <button type="button" class="btn prev-year" @click="prevNextYear(-1)">Prev Year
-      </button>
-      <button type="button" class="btn today" @click="prevNextYear(0)">Today
-      </button>
-      <button type="button" class="btn next-year" @click="prevNextYear(1)">Next Year
-      </button>
+      <div class="goto-buttons">
+        <button type="button" class="btn prev-year" @click="prevNextYear(-1)">Prev Year
+        </button>
+        <button type="button" class="btn today" @click="prevNextYear(0)">Today
+        </button>
+        <button type="button" class="btn next-year" @click="prevNextYear(1)">Next Year
+        </button>
+      </div>
     </div>
   </div>
 </template>
@@ -95,11 +97,11 @@
         const newDate = new Date(date.value.valueOf());
         newDate.setDate(day);
         newDate.setHours(0, 0, 0, 0);
-        
+
         const currDay = day + ' ' + currentMonth.value;
         let noteClass = '';
         if (daysWithNotes.value.includes(currDay)) noteClass = ' notes';
-        
+
         const dayClass = newDate.valueOf() == today.value ? 'current-day' : 'month-day';
         calendarDays.value += `<div class='${dayClass + noteClass}'>${day}</div>`;
       } else {
@@ -108,7 +110,7 @@
     }
 
     if (fromNotes) return;
-    
+
     activeDate.value = (date.value.getMonth() === new Date(today.value).getMonth() ? new Date(today.value).getDate() : '1') + ' ' + currentMonth.value;
     emit('newactivedate', activeDate.value);
   };
@@ -122,7 +124,7 @@
 
 <style>
   h2 {
-    font-size: 24px;
+    font-size: 1.5rem;
     color: mediumpurple;
     padding-bottom: 8px;
   }

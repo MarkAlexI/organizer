@@ -13,7 +13,7 @@ h1 {
   \*************************************************************************************************************************************************************************************************************************************************/
 
 h2 {
-    font-size: 24px;
+    font-size: 1.5rem;
     color: mediumpurple;
     padding-bottom: 8px;
 }
@@ -121,6 +121,32 @@ h2 {
   !*** css ./node_modules/css-loader/dist/cjs.js!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[4].use[0]!./src/components/Notes.vue?vue&type=style&index=0&id=59f8f241&scoped=true&lang=css ***!
   \**********************************************************************************************************************************************************************************************************************************************************/
 
+.notepad[data-v-59f8f241] {
+    display: flex;
+    gap: 10px;
+}
+#currentNote[data-v-59f8f241] {
+    max-width: 324px;
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+    padding: 10px;
+    max-width: 100%;
+    line-height: 1.5;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    box-shadow: 1px 1px 1px #999;
+}
+.control[data-v-59f8f241] {
+    background-color: slateblue;
+    margin-bottom: 5px;
+}
+.control[data-v-59f8f241]:hover {
+    background-color: steelblue;
+}
+#info[data-v-59f8f241] {
+    color: darkslateblue;
+    margin-bottom: 2px;
+}
 a[data-v-59f8f241] {
     display: inline-block;
     margin-bottom: 8px;
@@ -135,7 +161,7 @@ a[data-v-59f8f241]:active {
     color: mediumorchid;
 }
 li[data-v-59f8f241] {
-    margin-bottom: 13px;
+    margin-bottom: 11px;
 }
 .list-item[data-v-59f8f241] {
     display: inline-block;
@@ -152,6 +178,15 @@ li[data-v-59f8f241] {
 }
 .list-item-move[data-v-59f8f241] {
     transition: transform .8s ease;
+}
+.save[data-v-59f8f241] {
+    font-weight: 900;
+    max-height: 50px;
+}
+@media(min-width: 680px) {
+.notepad[data-v-59f8f241] {
+      flex-direction: column;
+}
 }
 
 /*!*********************************************************************************************************************************************************************************************************************************!*\
@@ -172,5 +207,17 @@ body {
 }
 .container {
     margin: 10px 20px;
+}
+@media(min-width: 680px) {
+.container {
+      margin-top: 15%;
+}
+.main {
+      display: flex;
+      flex-grow: 1;
+      justify-content: space-around;
+      align-items: top;
+      column-gap: clamp(10px, 1em, 40px);
+}
 }
 

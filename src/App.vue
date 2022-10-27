@@ -1,8 +1,10 @@
 <template>
   <div class="container">
     <MyHeader></MyHeader>
-    <Calendar @newactivedate="changeDate"></Calendar>
-    <Notes @listofdates="spanNotes"></Notes>
+    <div class="main">
+      <Calendar @newactivedate="changeDate"></Calendar>
+      <Notes @listofdates="spanNotes"></Notes>
+    </div>
   </div>
 </template>
 
@@ -14,12 +16,12 @@
 
   const keyDate = ref("35 Dfg 3214");
   const changeDate = (event) => keyDate.value = event;
-  
+
   provide('keyDate', keyDate);
-  
+
   const daysWithNotes = ref([]);
   const spanNotes = (event) => daysWithNotes.value = event;
-  
+
   provide('daysWithNotes', daysWithNotes);
 </script>
 
@@ -40,5 +42,19 @@
 
   .container {
     margin: 10px 20px;
+  }
+
+  @media(min-width: 680px) {
+    .container {
+      margin-top: 15%;
+    }
+    
+    .main {
+      display: flex;
+      flex-grow: 1;
+      justify-content: space-around;
+      align-items: top;
+      column-gap: clamp(10px, 1em, 40px);
+    }
   }
 </style>
