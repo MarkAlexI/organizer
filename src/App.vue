@@ -45,6 +45,10 @@
   }
 
   @media(min-width: 680px) {
+    h1 {
+      text-align: center;
+    }
+    
     .container {
       margin-top: 15%;
     }

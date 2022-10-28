@@ -2,9 +2,11 @@
   <div style="max-width: 360px;">
     <h2>Notes. Date: {{ keyDate }}.</h2>
     <div class="notepad">
-      <textarea name="currentNote" id="currentNote" cols="26" rows="6"></textarea>
+      <textarea id="currentNote" cols="26" rows="6" allow="clipboard-read; clipboard-write"></textarea>
       <div class="controls">
-        <button class="btn control save" v-on:click="saveNote()">Save.</button>
+        <button class="btn control save" v-on:click="saveNote()">Save</button>
+        <button class="btn control clear" v-on:click="clearNote()">Clear</button>
+        <button class="btn control copy" v-on:click="copyNote()">Copy</button>
       </div>
     </div>
 
@@ -26,6 +28,33 @@
 
   const notes = reactive(new Map());
   const emit = defineEmits(['listofdates']);
+
+  const clearNote = () => {
+    currentNote.value = '';
+  };
+
+  if (navigator.permissions) {
+    (async () => {
+      const queryOpts = {
+        name: 'clipboard-read',
+        allowWithoutGesture: false
+      };
+      const permissionStatus = await navigator.permissions.query(queryOpts);
+      console.log(permissionStatus.state);
+    })();
+  } else {
+    console.log("Your navigator does not support copying to clipboard. Use Google Chrome instead.");
+  }
+
+  const copyNote = () => {
+    const text = currentNote.value;
+
+    navigator.clipboard.writeText(text).then(() => {
+      console.log('Copying to clipboard was successful!');
+    }, (err) => {
+      console.error('Could not copy text: ', err);
+    });
+  };
 
   let openRequest = indexedDB.open('store', 1);
 
@@ -160,9 +189,20 @@
     box-shadow: 1px 1px 1px #999;
   }
 
+  .controls {
+    flex-direction: row;
+    flex-grow: 1;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+
   .control {
     background-color: slateblue;
-    margin-bottom: 5px;
+    margin-bottom: 10px;
+    font-weight: 900;
+    max-height: 50px;
+    min-width: 30px;
+    margin-right: 20px;
   }
 
   .control:hover {
@@ -215,12 +255,7 @@
     transition: transform .8s ease;
   }
 
-  .save {
-    font-weight: 900;
-    max-height: 50px;
-  }
-
-  @media(min-width: 680px) {
+  @media (min-width: 680px) {
     .notepad {
       flex-direction: column;
     }
