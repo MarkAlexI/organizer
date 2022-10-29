@@ -58,7 +58,7 @@
       flex-grow: 1;
       justify-content: space-around;
       align-items: top;
-      column-gap: clamp(10px, 1em, 40px);
+      column-gap: clamp(10px, 1em, 80px);
     }
   }
 </style>
