@@ -44,7 +44,7 @@
 
   const daysWithNotes = inject('daysWithNotes', []);
   watch(daysWithNotes, () => {
-    setCalendar(true);
+    setCalendar();
   });
 
 
@@ -78,7 +78,7 @@
     }
   };
 
-  const setCalendar = (fromNotes) => {
+  const setCalendar = () => {
     const prevLastDay = new Date(date.value.getFullYear(), date.value.getMonth(), 0).getDate();
     const totalMonthDay = new Date(date.value.getFullYear(), date.value.getMonth() + 1, 0).getDate();
     let firstWeekDay = new Date(date.value.getFullYear(), date.value.getMonth(), 1).getDay();
@@ -108,8 +108,6 @@
         calendarDays.value += `<div class='prev-day'>${day - totalMonthDay}</div>`;
       }
     }
-
-    if (fromNotes) return;
 
     activeDate.value = (date.value.getMonth() === new Date(today.value).getMonth() ? new Date(today.value).getDate() : '1') + ' ' + currentMonth.value;
     emit('newactivedate', activeDate.value);
