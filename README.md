@@ -10,5 +10,7 @@ Use the buttons to navigate the Calendar. To select a date, click on it. Enter t
 - Save - to save to IndexedDB
 - Clear - to remove text
 - Copy - to place in clipboard
+- Prev - find previous day with notes
+- Next - find next day with notes
 
 The entry is saved as a hyperlink with a title in the format 'hh:mm:ss'. The date with notes in the Calendar is highlighted in orange. Clicking on a date will open a list of notes. Clicking on the link opens the note in Textarea. The active date is shown in the header.

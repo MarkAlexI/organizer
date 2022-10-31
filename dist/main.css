@@ -148,10 +148,18 @@ h2 {
     font-weight: 900;
     max-height: 50px;
     min-width: 30px;
-    margin-right: 20px;
+    margin-right: 10px;
+}
+.control[data-v-59f8f241]:last-child {
+    margin-right: 0;
+    margin-bottom: 5px;
 }
 .control[data-v-59f8f241]:hover {
     background-color: steelblue;
+}
+.prev[data-v-59f8f241],
+  .next[data-v-59f8f241] {
+    background-color: slategray;
 }
 #info[data-v-59f8f241] {
     color: darkslateblue;

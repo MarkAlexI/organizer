@@ -7,6 +7,8 @@
         <button class="btn control save" v-on:click="saveNote()">Save</button>
         <button class="btn control clear" v-on:click="clearNote()">Clear</button>
         <button class="btn control copy" v-on:click="copyNote()">Copy</button>
+        <button class="btn control prev" v-on:click="findNote(-1)">Prev</button>
+        <button class="btn control next" v-on:click="findNote(1)">Next</button>
       </div>
     </div>
 
@@ -160,6 +162,34 @@
     }
   };
 
+  const findNote = (direction) => {
+    const db = openRequest.result;
+    const transaction = db.transaction(['notes'], 'readonly');
+
+    const allNotes = transaction.objectStore('notes');
+    const request = allNotes.getAllKeys();
+
+    request.onsuccess = function() {
+      if (request.result !== undefined) {
+        if (request.result.indexOf(keyDate.value) === -1) request.result.push(keyDate.value);
+        const dates = request.result
+          .map(el => new Date(el))
+          .sort((a, b) => a - b)
+          .map(day => day.toLocaleString('en-GB', { year: 'numeric', month: 'long', day: 'numeric' }));
+        const index = dates.indexOf(keyDate.value);
+        let day = '';
+        if (index !== -1) day = dates[index + direction];
+        currentNote.value = day ?
+          'Closest day: ' + day + '.':
+          notes.get(keyDate.value) ?
+          'Closest day: today.' :
+          'No records. Search another direction.';
+      } else {
+        console.log('No access');
+      }
+    };
+  };
+
   const info = () => {
     event.preventDefault();
     const index = event.currentTarget.dataset.key;
@@ -202,11 +232,21 @@
     font-weight: 900;
     max-height: 50px;
     min-width: 30px;
-    margin-right: 20px;
+    margin-right: 10px;
+  }
+
+  .control:last-child {
+    margin-right: 0;
+    margin-bottom: 5px;
   }
 
   .control:hover {
     background-color: steelblue;
+  }
+
+  .prev,
+  .next {
+    background-color: slategray;
   }
 
   #info {
